@@ -1,24 +1,29 @@
-pipeline{
-	agent{ docker{ image 'maven:3.6.3'} }
+node{
+	def commit_id
+	stage ('Preparation') {
+		checkout scm
+		sh git rev-parse --short HEAD > .git/commit_id
+		commit_id = readFile('.git/commit_id').trim()
+	}
 	
-	stages{
-		stage ('Compile Stage') {
-			steps {
-				git "https://github.com/ishikasaini4/PJP2.0.git"
-				sh 'mvn clean compile'
-			}
-		}
-		
-		stage ('Testing Stage') {
-			steps { 
-				sh 'mvn test'
-			}
-		}
-		
-		stage ('Deployment Stage') {
-			steps {
-				sh 'mvn deploy'
-			}
+	stage ('Testing Stage') {
+		def container = docker.image('maven: 3.6.3-jdk-9')
+		container.pull()
+		container.inside{
+			sh 'cd projects/PS_PJP2.0/certificates/week2/Assignment2/DateTimeCalculator'
+			sh 'mvn -f projects/PS_PJP2.0/certificates/week2/Assignment2/DateTimeCalculator clean'
+			sh 'mvn -f projects/PS_PJP2.0/certificates/week2/Assignment2/DateTimeCalculator test'
 		}
 	}
+	
+	stage ('Installation Stage') {
+		def container = docker.image('maven: 3.6.3-jdk-9')
+		container.pull()
+		container.inside{
+			sh 'cd projects/PS_PJP2.0/certificates/week2/Assignment2/DateTimeCalculator'
+			sh 'mvn -f projects/PS_PJP2.0/certificates/week2/Assignment2/DateTimeCalculator install'
+			sh 'cd projects/PS_PJP2.0/certificates/week2/Assignment2/DateTimeCalculator site'
+		}
+	}
+	
 }
