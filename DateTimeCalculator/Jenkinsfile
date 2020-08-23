@@ -17,7 +17,7 @@ node{
 	}
 	
 	stage ('Installation Stage') {
-		def container = docker.image('maven: 3.6.3-jdk-9')
+		def container = docker.image('maven: 3.6.3')
 		container.pull()
 		container.inside{
 			sh 'cd projects/PS_PJP2.0/certificates/week2/Assignment2/DateTimeCalculator'
