@@ -2,7 +2,7 @@ node{
 	def commit_id
 	stage ('Preparation') {
 		checkout scm
-		sh git rev-parse --short HEAD > .git/commit_id
+		sh "git rev-parse --short HEAD > .git/commit_id"
 		commit_id = readFile('.git/commit_id').trim()
 	}
 	
