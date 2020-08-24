@@ -179,9 +179,9 @@ public class DateOperations {
 
 	private String format(String s) {
 		String[] strs = s.split("-");
-		for (String st : strs) {
-			if (st.length() < 2)
-				strs[0] = "0" + strs[0];
+		for (int i = 0; i<strs.length-1; i++) {
+			if (strs[i].length() < 2)
+				strs[i] = "0" + strs[i];
 		}
 		return strs[0] + "-" + strs[1] + "-" + strs[2];
 	}
