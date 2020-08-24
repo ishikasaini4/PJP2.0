@@ -2,7 +2,10 @@ package com.sapient.DateTimeCalculator;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Scanner;
+import java.util.function.BiFunction;
 
 public class Menu {
 	private static Scanner scn;
@@ -20,17 +23,16 @@ public class Menu {
 
 	private void fillmenu() {
 		menuOps.add("---------------------------MENU----------------------------");
-		menuOps.add("1. String to date conversion");
-		menuOps.add("2. Add dates");
-		menuOps.add("3. Substract dates");
-		menuOps.add("4. Subtract n days");
-		menuOps.add("5. Subtract n weeks");
-		menuOps.add("6. Subtract n months");
-		menuOps.add("7. Get day of the week");
-		menuOps.add("8. Get week of the year");
-		menuOps.add("9. Natural language phrase to date conversion");
-		menuOps.add("10.Get current session history.");
-		menuOps.add("11.Get previous sessions history.");
+		menuOps.add("1. Add dates");
+		menuOps.add("2. Substract dates");
+		menuOps.add("3. Subtract n days");
+		menuOps.add("4. Subtract n weeks");
+		menuOps.add("5. Subtract n months");
+		menuOps.add("6. Get day of the week");
+		menuOps.add("7. Get week of the year");
+		menuOps.add("8. Natural language phrase to date conversion");
+		menuOps.add("9 .Get current session history.");
+		menuOps.add("10.Get previous sessions history.");
 	}
 
 	public void displayMenu() throws IOException {
@@ -49,15 +51,86 @@ public class Menu {
 			Object res = goToOperation(n);
 			System.out.println(res);
 		}
-
-		try {
-			fOp.closeFiles();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+		
+		fOp.closeFiles();
+		
 	}
 
+	public Object goToOperation(int n) throws NullPointerException{
+		HashMap<Integer, BiFunction<Object, Object, Object>> m = new HashMap<Integer, BiFunction<Object, Object, Object>>();
+
+		m.put(1, (s1, s2) -> {
+			Calendar c = dOp.add((String) s1, (String) s2);
+			fOp.write(s1 + "," + s2 + ",ADD," + c.getTime().toString() + "\n");
+			return c.getTime();
+		});
+
+		m.put(2, (s1, s2) -> {
+			String res = dOp.subtract((String) s1, (String) s2).toString();
+			fOp.write(s1 + "," + s2 + ",SUBTRACT," + res + "\n");
+			return res;
+		});
+
+		m.put(3, (s, n1) -> {
+			Calendar c = dOp.minusNDays((String) s, (int) n1);
+			fOp.write(s + ",SUBTRACT N DAYS," + c.getTime().toString() + "\n");
+			return c.getTime();
+		});
+
+		m.put(4, (s, n2) -> {
+			Calendar c = dOp.minusNWeeks((String) s, (int) n2);
+			fOp.write(s + ",SUBTRACT N WEEKS," + c.getTime().toString() + "\n");
+			return c.getTime();
+		});
+
+		m.put(5, (s, n3) -> {
+			Calendar c = dOp.minusNMonths((String) s, (int) n3);
+			fOp.write(s + ",SUBTRACT N MONTHS," + c.getTime().toString() + "\n");
+			return c.getTime();
+		});
+
+		m.put(6, (s, n4) -> {
+			int res = dOp.getDayOfTheWeek((String) s);
+			fOp.write(s + ",DAY OF THE WEEK," + res + "\n");
+			return res;
+		});
+
+		m.put(7, (s, n5) -> {
+			int res = dOp.getWeekNumber((String) s);
+			fOp.write(s + ",WEEK OF THE YEAR," + res + "\n");
+			return res;
+		});
+		m.put(8, (s, n6) -> {
+			Calendar c = dOp.NLPToDate((String) s, (int) n6);
+			fOp.write(s + "," + n6 + ",NLP TO DATE," + c.getTime().toString() + "\n");
+			return c.getTime();
+		});
+
+		m.put(9, (a, b) -> {
+			try {
+				fOp.write("CURRENT SESSION HISTORY\n");
+				return fOp.getSessionsHistory(0);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		});
+
+		m.put(10, (c, d) -> {
+			try {
+				fOp.write("PREVIOUS SESSIONS HISTORY\n");
+				return fOp.getSessionsHistory(1);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return null;
+		});
+		
+		return m.get(n).apply(enterString(), enterNumber());
+	}
+
+	
+	
 	private String enterString() {
 		System.out.println("Enter date in format dd-MM-yyyy");
 		String s = scn.next();
@@ -65,96 +138,9 @@ public class Menu {
 
 	}
 
-	private Object goToOperation(int n) throws IOException {
-		switch (n) {
-		case 1: {
-			String s = enterString();
-			dOp.d1.setDate(s);
-			fOp.write(s + ",STRING TO DATE," + dOp.d1.getDate().getTime().toString() + "\n");
-			return dOp.d1.getDate().getTime();
-		}
-		case 2: {
-			String s1 = enterString();
-			dOp.d1.setDate(s1);
-			String s2 = enterString();
-			dOp.d2.setDate(s2);
-			fOp.write(s1 + "," + s2 + ",ADD," + dOp.add(s1, s2).getTime().toString() + "\n");
-			return dOp.add(s1, s2).getTime();
-		}
-		case 3: {
-			String s1 = enterString();
-			dOp.d1.setDate(s1);
-			String s2 = enterString();
-			dOp.d2.setDate(s2);
-			fOp.write(s1 + "," + s2 + ",SUBTRACT," + dOp.subtract(s1, s2).toString() + "\n");
-			return dOp.subtract(s1, s2);
-		}
-		case 4: {
-			String s = enterString();
-			dOp.d1.setDate(s);
-			System.out.println("Enter n");
-			int no = scn.nextInt();
-			fOp.write(s + ",SUBTRACT N DAYS," + dOp.minusNDays(s, no).getTime().toString() + "\n");
-			return dOp.minusNDays(s, no).getTime();
-		}
-		case 5: {
-			String s = enterString();
-			dOp.d1.setDate(s);
-			System.out.println("Enter n");
-			int no = scn.nextInt();
-			fOp.write(s + ",SUBTRACT N WEEKS," + dOp.minusNWeeks(s, no).getTime().toString() + "\n");
-			return dOp.minusNWeeks(s, no).getTime();
-
-		}
-		case 6: {
-			String s = enterString();
-			dOp.d1.setDate(s);
-			System.out.println("Enter n");
-			int no = scn.nextInt();
-			fOp.write(s + ",SUBTRACT N MONTHS," + dOp.minusNMonths(s, no).getTime().toString() + "\n");
-			return dOp.minusNMonths(s, no).getTime();
-		}
-		case 7: {
-			String s = enterString();
-			dOp.d1.setDate(s);
-			fOp.write(s + ",DAY OF THE WEEK," + dOp.getDayOfTheWeek(s) + "\n");
-			return dOp.getDayOfTheWeek(s);
-		}
-		case 8: {
-			String s = enterString();
-			dOp.d1.setDate(s);
-			fOp.write(s + ",WEEK OF THE YEAR," + dOp.getWeekNumber(s) + "\n");
-			return dOp.getWeekNumber(s);
-		}
-		case 9: {
-			System.out.println("Enter n(0,if not required) :");
-			int no = scn.nextInt();
-			scn.nextLine();
-			System.out.println("Enter phrase : ");
-			String s = scn.nextLine();
-			fOp.write(s + "," + no + ",NLP TO DATE," + dOp.NLPToDate(s, no).getTime().toString() + "\n");
-			return dOp.NLPToDate(s, no).getTime();
-
-		}
-		case 10: {
-			try {
-				fOp.write("CURRENT SESSION HISTORY\n");
-				return fOp.getSessionsHistory(0);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		case 11: {
-			try {
-				fOp.write("PREVIOUS SESSIONS HISTORY\n");
-				return fOp.getSessionsHistory(1);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		default:
-			return "Enter a valid choice!";
-		}
+	private Object enterNumber() {
+		System.out.println("Enter n (if not required enter -1): ");
+		int n = scn.nextInt();
+		return n;
 	}
-
 }

@@ -24,7 +24,7 @@ public class DateTimeTest {
 		Calendar c = dtPojo.stringToDate("12-10-2005");
 		Calendar exp = Calendar.getInstance();
 		exp.clear();
-		exp.set(2005, 10 - 1, 12);
+		exp.set(2005, 9, 12);
 		assertEquals(exp, c);
 	}
 
