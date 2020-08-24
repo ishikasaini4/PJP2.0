@@ -1,29 +1,30 @@
-node{
-	def commit_id
-	stage ('Preparation') {
-		checkout scm
-		sh "git rev-parse --short HEAD > .git/commit_id"
-		commit_id = readFile('.git/commit_id').trim()
-	}
-	
-	stage ('Testing Stage') {
-		def container = docker.image('maven: 3.6.3')
-		container.pull()
-		container.inside{
-			sh 'cd projects/PS_PJP2.0/certificates/week2/Assignment2/DateTimeCalculator'
-			sh 'mvn -f projects/PS_PJP2.0/certificates/week2/Assignment2/DateTimeCalculator clean'
-			sh 'mvn -f projects/PS_PJP2.0/certificates/week2/Assignment2/DateTimeCalculator test'
-		}
-	}
-	
-	stage ('Installation Stage') {
-		def container = docker.image('maven: 3.6.3')
-		container.pull()
-		container.inside{
-			sh 'cd projects/PS_PJP2.0/certificates/week2/Assignment2/DateTimeCalculator'
-			sh 'mvn -f projects/PS_PJP2.0/certificates/week2/Assignment2/DateTimeCalculator install'
-			sh 'cd projects/PS_PJP2.0/certificates/week2/Assignment2/DateTimeCalculator site'
-		}
-	}
-	
+pipeline {
+    agent any
+    tools {
+        maven 'Maven 3.6.3'
+    }
+    stages {
+        stage ('Initialize') {
+            steps {
+                sh '''
+                    echo "PATH = ${PATH}"
+                    echo "M2_HOME = ${M2_HOME}"
+                '''
+            }
+        }
+
+        stage ('Build') {
+            steps {
+                sh 'cd DateTimeCalculator'
+                sh 'mvn -f DateTimeCalculator clean'
+                sh 'mvn -f DateTimeCalculator test'
+                sh 'mvn -f DateTimeCalculator install'
+            }
+            post {
+                success {
+                    junit 'DateTimeCalculator/target/surefire-reports/*.xml' 
+                }
+            }
+        }
+    }
 }
