@@ -1,189 +1,57 @@
 package com.sapient.DateTimeCalculator;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.NoSuchElementException;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 
-public class DateOperations {
-	public DateTimePojo d1;
-	public DateTimePojo d2;
+public class FileOperations {
+	final static private String current = "current-sessions.txt";
+	final static private String permanent = "sessions.txt";
+	private BufferedWriter perm;
+	private BufferedWriter temp;
 
-	public DateOperations() {
-		d1 = new DateTimePojo();
-		d2 = new DateTimePojo();
+	public FileOperations() throws IOException {
+		openFiles();
 	}
 
-	public Calendar add(String a, String b) {
-		d1.setDate(a);
-		d2.setDate(b);
-		Calendar res = (Calendar) d1.getDate().clone();
-
-		res.add(Calendar.YEAR, d2.getDate().get(Calendar.YEAR));
-		res.add(Calendar.MONTH, d2.getDate().get(Calendar.MONTH));
-		res.add(Calendar.DAY_OF_MONTH, d2.getDate().get(Calendar.DAY_OF_MONTH));
-		return res;
-	}
-
-	public 	HashMap<String, Long>  subtract(String a, String b) {
-		d1.setDate(a);
-		d2.setDate(b);
-		if (a.length() < 10)
-			a = format(a);
-		if (b.length() < 10)
-			b = format(b);
-
-		DateTimeFormatter f = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-		LocalDate da = LocalDate.parse(a, f);
-		LocalDate db = LocalDate.parse(b, f);
-
-		HashMap<String, Long> map = new HashMap<String, Long>();
-		LocalDate l, s;
-
-		if (da.isBefore(db)) {
-			l = da;
-			s = db;
-		} else {
-			l = db;
-			s = da;
+	public void write(String s) {
+		try {
+			this.perm.write(s);
+			this.temp.write(s);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 
-		map.put("DAYS", ChronoUnit.DAYS.between(l, s));
-		map.put("WEEKS", ChronoUnit.WEEKS.between(l, s));
-		map.put("MONTHS", ChronoUnit.MONTHS.between(l, s));
-		map.put("YEARS", ChronoUnit.YEARS.between(l, s));
-		return map;
 	}
 
-	public Calendar minusNDays(String date, int n) {
-		d1.setDate(date);
-		Calendar res = d1.getDate();
-		res.add(Calendar.DATE, -n);
-		return res;
+	public void closeFiles() throws IOException {
+		this.perm.close();
+		this.temp.close();
+		new File("current-sessions.txt").deleteOnExit();
 	}
 
-	public Calendar minusNWeeks(String date, int n) {
-		d1.setDate(date);
-		Calendar res = d1.getDate();
-		res.add(Calendar.WEEK_OF_YEAR, -n);
-		return res;
+	public void openFiles() throws IOException {
+		this.perm = new BufferedWriter(new FileWriter("sessions.txt", true));
+		this.temp = new BufferedWriter(new FileWriter("current-sessions.txt", true));
 	}
 
-	public Calendar minusNMonths(String date, int n) {
-		d1.setDate(date);
-		Calendar res = d1.getDate();
-		res.add(Calendar.MONTH, -n);
-		return res;
-	}
-
-	public int getDayOfTheWeek(String date) {
-		d1.setDate(date);
-		return d1.getDate().get(Calendar.DAY_OF_WEEK);
-	}
-
-	public int getWeekNumber(String date) {
-		d1.setDate(date);
-		return d1.getDate().get(Calendar.WEEK_OF_YEAR);
-	}
-
-	public Calendar NLPToDate(String phrase, int n) {
-		Date date = Calendar.getInstance().getTime();
-		final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-		String strDate = dateFormat.format(date); // current date
-
-		d1.setDate(strDate);
-		Calendar res = Calendar.getInstance();
-		phrase = phrase.toLowerCase();
-
-		HashMap<String, NLP> ht = new HashMap<String, NLP>();
-
-		ht.put("today", (p, x) -> {
-		});
-		ht.put("tomorrow", (p, x) -> {
-			res.add(Calendar.DAY_OF_MONTH, 1);
-		});
-		ht.put("yesterday", (p, x) -> {
-			res.add(Calendar.DAY_OF_MONTH, -1);
-		});
-		ht.put("day after tomorrow", (p, x) -> {
-			res.add(Calendar.DAY_OF_MONTH, 2);
-		});
-		ht.put("day before yesterday", (p, x) -> {
-			res.add(Calendar.DAY_OF_MONTH, -2);
-		});
-		ht.put("next week", (p, x) -> {
-			res.add(Calendar.WEEK_OF_YEAR, 1);
-		});
-		ht.put("last week", (p, x) -> {
-			res.add(Calendar.WEEK_OF_YEAR, -1);
-		});
-		ht.put("previous week", (p, x) -> {
-			res.add(Calendar.WEEK_OF_YEAR, -1);
-		});
-		ht.put("next month", (p, x) -> {
-			res.add(Calendar.MONTH, 1);
-		});
-		ht.put("last month", (p, x) -> {
-			res.add(Calendar.MONTH, -1);
-		});
-		ht.put("months after", (p, x) -> {
-			res.add(Calendar.MONTH, n);
-		});
-		ht.put("months before", (p, x) -> {
-			res.add(Calendar.MONTH, -n);
-		});
-		ht.put("next year", (p, x) -> {
-			res.add(Calendar.YEAR, 1);
-		});
-		ht.put("last year", (p, x) -> {
-			res.add(Calendar.YEAR, -1);
-		});
-		ht.put("days from now", (p, x) -> {
-			res.add(Calendar.DAY_OF_MONTH, n);
-		});
-		ht.put("weeks from now", (p, x) -> {
-			res.add(Calendar.WEEK_OF_MONTH, n);
-		});
-		ht.put("months from now", (p, x) -> {
-			res.add(Calendar.MONTH, n);
-		});
-		ht.put("years from now", (p, x) -> {
-			res.add(Calendar.YEAR, n);
-		});
-		ht.put("days earlier", (p, x) -> {
-			res.add(Calendar.DAY_OF_MONTH, -n);
-		});
-		ht.put("weeks earlier", (p, x) -> {
-			res.add(Calendar.WEEK_OF_MONTH, -n);
-		});
-		ht.put("months earlier", (p, x) -> {
-			res.add(Calendar.MONTH, -n);
-		});
-		ht.put("years earlier", (p, x) -> {
-			res.add(Calendar.YEAR, -n);
-		});
-
-		NLP nlpconverter = null;
-		if (ht.containsKey(phrase)) {
-			nlpconverter = ht.get(phrase);
-			nlpconverter.convertToDate(phrase, n);
-		} else {
-			throw new NoSuchElementException("Enter a valid natural language phrase");
+	public ArrayList<String> getSessionsHistory(int i) throws IOException, FileNotFoundException {
+		closeFiles();
+		openFiles();
+		BufferedReader reader = (i == 0) ? new BufferedReader(new FileReader(current))
+				: new BufferedReader(new FileReader(permanent));
+		String s;
+		ArrayList<String> res = new ArrayList<String>();
+		while ((s = reader.readLine()) != null) {
+			res.add(s);
 		}
 		return res;
+
 	}
 
-	private String format(String s) {
-		String[] strs = s.split("-");
-		for (int i = 0; i < strs.length - 1; i++) {
-			if (strs[i].length() < 2)
-				strs[i] = "0" + strs[i];
-		}
-		return strs[0] + "-" + strs[1] + "-" + strs[2];
-	}
 }
