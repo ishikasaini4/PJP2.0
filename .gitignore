@@ -1,5 +1,5 @@
 .DS_Store
 FeeCalculator/target/
-*/.classpath
-*/.project
+/.classpath
+/.project
 /.settings
