@@ -12,8 +12,8 @@ import java.util.Set;
 public class TransactionOperations {
 	private FileOperations fOps;
 
-	public TransactionOperations() throws IOException {
-		fOps = new FileOperations();
+	public TransactionOperations(String s) throws IOException {
+		fOps = new FileOperations(s);
 	}
 
 	private void fillMap(ArrayList<Transaction> list) { 		// also processes intra day transactions

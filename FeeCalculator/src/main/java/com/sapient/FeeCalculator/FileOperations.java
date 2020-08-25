@@ -12,10 +12,11 @@ import java.util.Calendar;
 
 public class FileOperations {
 	private static final String writefile = "Transactions_Fee_File.csv";
-	private static final String readFile = "Sample_Data_Fee_Calculator.csv";
+	private String readFile;
 	private BufferedWriter writer;
 
-	public FileOperations() throws IOException {
+	public FileOperations(String inputFile) throws IOException {
+		readFile = inputFile;
 		writer = new BufferedWriter(new FileWriter(writefile));
 		writer.write(
 				"Client ID, Transaction Type, Transaction Date, Priority, Processing Free" + System.lineSeparator());
