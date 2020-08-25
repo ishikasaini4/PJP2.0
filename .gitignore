@@ -1,5 +1,6 @@
 .DS_Store
 FeeCalculator/target/
+IncomeCalculator/target/
 /.classpath
 /.project
 /.settings
