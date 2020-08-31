@@ -52,6 +52,7 @@ public class OperationsServlet extends HttpServlet {
 			break;
 		}
 
+		request.setAttribute("operation", request.getTitle());
 		request.setAttribute("result", res);
 		request.getRequestDispatcher("Result.jsp").forward(request, response);
 	}

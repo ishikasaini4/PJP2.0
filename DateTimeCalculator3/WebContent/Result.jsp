@@ -2,7 +2,7 @@
 <title>Result</title>
 
 <body>
-	<h1>Result of ${operation} Operation</h1>
+	<h1>Result of Operation</h1>
 	<br><br>
 	<p>Result :${result}</p>
 	<br>
