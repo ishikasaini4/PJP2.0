@@ -5,24 +5,22 @@
 	<h2 align="center">MENU</h2>
 
 	<form action="CalculatorServlet" method="get">
-		<input type="radio" name="choice" value="1"> Add Dates
+	
+		1. <a href="Add.jsp">Add Dates</a> 
 		<br>
-		<input type="radio" name="choice" value="2"> Subtract Dates	
+		2. <a href="Subtract.jsp"> Subtract Dates</a>	
 		<br>
-		<input type="radio" name="choice" value="3"> Subtract Days from Date	
+		3. <a href="MinusDays.jsp">Subtract Days from Date</a> 	
 		<br>
+		4. <a href="MinusWeeks.jsp">Subtract Weeks from Date</a> 	 
 		<br>
-		<input type="radio" name="choice" value="4"> Subtract Weeks from Date
+		5. <a href="MinusMonths.jsp">Subtract Months from Date</a> 
 		<br>
-		<input type="radio" name="choice" value="5"> Subtract Months from Date
+		6. <a href="DayOfWeek.jsp">Day of the Week</a> 
 		<br>
-		<input type="radio" name="choice" value="6"> Day of the Week 
+		7. <a href="WeekOfYear.jsp">Week Number of the Year</a>
 		<br>
-		<input type="radio" name="choice" value="7"> Week Number of the Year
-		<br>
-		<input type="radio" name="choice" value="8"> Natural Language Phrase to Date
-		<br><br>
-		<input type="submit" value="GO!">
+		8. <a href="NLPToDate.jsp">Natural Language Phrase to Date</a> 
 	</form>
 </body>
 </html>
