@@ -1,6 +1,7 @@
-function calculate(){
-    var operation = document.getElementsByName("operation");
-    const result;
+
+function calculation(){
+    var operation = document.getElementsByName("operation").value;
+    var res = NaN;
     switch(operation){
         case 1: res = add(); break;
         case 2: res = subtract(); break;
@@ -11,12 +12,13 @@ function calculate(){
         case 7: res = weekOfYear(); break;
         case 8: res = nlpToDate(); break;
     }
-    sessionStorage.setItem("result",result);
+    document.getElementById("result").innerHTML = res;
 }
 
 function add(){
-    var d1 = document.getElementsByName('date1').value;
-    var d2 = document.getElementsByName('date2').value;
+    var d1 = document.getElementsByName("date1").value;
+    console.log(typeof d1);
+    var d2 = document.getElementsByName("date2").value;
 
     var date1 = new Date(d1);
     var date2 = new Date(d2);

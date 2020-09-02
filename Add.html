@@ -8,7 +8,7 @@
 	<div class="container">
         <h1>Add Dates</h1>
         <br>
-		<form  class="form-group" action="/Result.html">
+		<form  id="form" class="form-group" action="/Result.html">
             Enter Dates in format (dd-MM-yyyy)
             <br> 
             <input type="hidden" name="operation" value="1"> 
@@ -16,11 +16,11 @@
             <br> 
             Date 2: <input class="form-control" type="text" name="date2">
             <br> <br> 
-            <input class="btn btn-primary" type="submit"value="Calculate">
+            <input class="btn btn-primary" type="submit" value="Calculate" onclick="calculation()">
 		</form>
 		<br> <a href="/Menu.html"> Go Back to Menu </a>
     </div>
-    <script src="/calculate.js"></script>
+    <script type = "text/javascript" src="/calculate.js"></script>
     <script src="/bootstrap/js/jquery-3.5.1.js"></script>
     <script src="/bootstrap/js/bootstrap.min.js"></script>
 </body>
