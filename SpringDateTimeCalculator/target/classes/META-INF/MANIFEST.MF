@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Built-By: ishikasaini
-Build-Jdk: 9.0.1
-Implementation-Title: SpringDateTimeCalculator
-Implementation-Version: 0.0.1-SNAPSHOT
-Implementation-Vendor-Id: com.sapient
-Implementation-URL: http://maven.apache.org
-Created-By: Maven Integration for Eclipse
-
