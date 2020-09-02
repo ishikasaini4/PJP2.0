@@ -10,7 +10,7 @@
 			<input type="hidden" name="operation" value="8">
 			Phrase : <input type="text" name="phrase">
 			<br><br>
-			<input type="submit" value="Calculate">
+			<input class="btn btn-primary" type="submit" value="Calculate">
 		</form>
 			<br>
 		<a href="Menu.jsp"> Go Back to Menu </a>

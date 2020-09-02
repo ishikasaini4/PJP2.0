@@ -12,7 +12,7 @@
 				name="operation" value="4"> Date : <input type="text"
 				name="date1"> <br> Weeks : <input type="text"
 				name="weeks"> <br>
-			<br> <input type="submit" value="Calculate">
+			<br> <input class="btn btn-primary" type="submit" value="Calculate">
 		</form>
 		<br> <a href="Menu.jsp"> Go Back to Menu </a>
 	</div>

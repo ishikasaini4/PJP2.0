@@ -14,7 +14,7 @@
 			<br>
 			Months : <input type="text" name="months">
 			<br><br>
-			<input type="submit" value="Calculate">
+			<input class="btn btn-primary" type="submit" value="Calculate">
 		</form>
 		<br>
 		<a href="Menu.jsp"> Go Back to Menu </a>

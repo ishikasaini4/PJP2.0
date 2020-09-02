@@ -1,3 +1,4 @@
+<%@ include file="common/header.jspf"%>
 <html>
 <title>Day of Week</title>
 
@@ -10,9 +11,10 @@
 		Date : <input type="text" name="date1">
 		<br>
 		<br>
-		<input type="submit" value="Calculate">
+		<input class="btn btn-primary" type="submit" value="Calculate">
 	</form>
 		<br>
 	<a href="Menu.jsp"> Go Back to Menu </a>
 </body>
 </html>
+<%@ include file="common/footer.jspf"%>
