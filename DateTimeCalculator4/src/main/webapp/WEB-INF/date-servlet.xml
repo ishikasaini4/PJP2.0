@@ -5,7 +5,7 @@
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<context:component-scan base-package="com.sapient.calculator" />
+	<context:component-scan base-package="com.sapient.Calculator.*" />
 
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">

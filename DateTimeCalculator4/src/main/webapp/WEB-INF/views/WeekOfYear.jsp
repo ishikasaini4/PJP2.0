@@ -1,3 +1,5 @@
+<%@ include file="common/header.jspf"%>
+
 <html>
 <title>Week of Year</title>
 
@@ -17,3 +19,4 @@
 	<a href="Menu.jsp"> Go Back to Menu </a>
 </body>
 </html>
+<%@ include file="common/footer.jspf"%>

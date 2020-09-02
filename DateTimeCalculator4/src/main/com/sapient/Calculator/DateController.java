@@ -14,7 +14,7 @@ public class DateController {
 	DateTimeBO bo;
 	private final String result = "Result";
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping(value = "/Menu", method = RequestMethod.GET)
 	public String getMenu() {
 		return "Menu";
 	}
